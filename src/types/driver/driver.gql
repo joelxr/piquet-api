@@ -1,0 +1,25 @@
+type Driver {
+  driverId: Int
+  driverRef: String
+}
+
+input NewDriverInput {
+  driverId: Int
+  driverRef: String
+}
+
+input UpdateDriverInput {
+  driverId: Int
+  driverRef: String
+}
+
+extend type Query {
+  drivers: [Driver]
+  driver(id: ID!): Driver!
+}
+
+extend type Mutation {
+  newDriver(input: NewDriverInput!): Driver!
+  updateDriver(input: UpdateDriverInput!): Driver!
+  removeDriver(id: ID!): Driver!
+}

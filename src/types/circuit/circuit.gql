@@ -1,0 +1,46 @@
+type Circuit {
+  circuitId: Int!
+  circuitRef: String!
+  name: String!
+  location: String
+  country: String
+  lat: Float
+  lng: Float
+  alt: Float
+  url: String!
+}
+
+input NewCircuitInput {
+  circuitId: Int!
+  circuitRef: String!
+  name: String!
+  location: String
+  country: String
+  lat: Float
+  lng: Float
+  alt: Float
+  url: String!
+}
+
+input UpdateCircuitInput {
+  circuitId: Int
+  circuitRef: String
+  name: String
+  location: String
+  country: String
+  lat: Float
+  lng: Float
+  alt: Float
+  url: String
+}
+
+extend type Query {
+  circuits: [Circuit]!
+  circuit(id: ID!): Circuit!
+}
+
+extend type Mutation {
+  newCircuit(input: NewCircuitInput!): Circuit!
+  updateCircuit(input: UpdateCircuitInput!): Circuit!
+  removeCircuit(id: ID!): Circuit!
+}

@@ -4,8 +4,55 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "babel src --out-dir dist",
+    "test": "echo test",
+    "dev": "nodemon --exec yarn restart",
+    "restart": "rimraf dist && yarn build && yarn start",
+    "start": "node dist/index.js",
+    "new": "hygen new"
   },
   "author": "Joel Rocha <joelxr@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/cli": "7.5.x",
+    "@babel/core": "7.5.x",
+    "@babel/plugin-proposal-class-properties": "7.5.x",
+    "@babel/plugin-proposal-object-rest-spread": "7.5.x",
+    "@babel/preset-env": "7.5.x",
+    "babel-core": "7.0.0-bridge.0",
+    "babel-eslint": "10.0.2",
+    "babel-jest": "24.8.0",
+    "cross-env": "5.2.x",
+    "eslint": "6.0.x",
+    "eslint-config-prettier": "6.0.x",
+    "eslint-config-standard": "12.0.x",
+    "eslint-friendly-formatter": "4.0.x",
+    "eslint-loader": "2.2.x",
+    "eslint-plugin-import": "2.18.x",
+    "eslint-plugin-jest": "22.7.x",
+    "eslint-plugin-node": "9.1.x",
+    "eslint-plugin-prettier": "3.1.0",
+    "eslint-plugin-promise": "4.2.x",
+    "eslint-plugin-standard": "4.0.x",
+    "graphql-codegen-core": "0.18.x",
+    "hygen": "4.0.x",
+    "jest": "24.8.x",
+    "nodemon": "1.19.x",
+    "prettier": "1.18.x",
+    "rimraf": "2.6.x"
+  },
+  "dependencies": {
+    "apollo-server": "2.6.7",
+    "bcrypt": "3.0.6",
+    "cuid": "2.1.6",
+    "graphql": "14.4.2",
+    "graphql-import": "0.7.1",
+    "graphql-tools": "4.0.5",
+    "lodash": "4.17.11",
+    "mongoose": "5.6.3",
+    "validator": "11.1.0"
+  },
+  "engines": {
+    "node": "10"
+  }
 }
