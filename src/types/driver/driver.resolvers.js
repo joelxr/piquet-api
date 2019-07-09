@@ -20,7 +20,6 @@ const newDriver = (_, args, ctx) => {
 }
 
 const drivers = (_, args, ctx) => {
-  console.log(1)
   if (!ctx.user) {
     throw new AuthenticationError()
   }

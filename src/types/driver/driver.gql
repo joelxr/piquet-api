@@ -1,16 +1,37 @@
 type Driver {
-  driverId: Int
-  driverRef: String
+  driverId: Int!
+  driverRef: String!
+  number: Int
+  code: String
+  forename: String
+  surname: String
+  dob: Date
+  nationality: String
+  url: String
 }
 
 input NewDriverInput {
-  driverId: Int
-  driverRef: String
+  driverId: Int!
+  driverRef: String!
+  number: Int
+  code: String
+  forename: String
+  surname: String
+  dob: Date
+  nationality: String
+  url: String
 }
 
 input UpdateDriverInput {
   driverId: Int
   driverRef: String
+  number: Int
+  code: String
+  forename: String
+  surname: String
+  dob: Date
+  nationality: String
+  url: String
 }
 
 extend type Query {

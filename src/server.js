@@ -16,6 +16,8 @@ const types = [
 
 export const start = async () => {
   const rootSchema = `
+    scalar Date
+
     schema {
       query: Query,
       mutation: Mutation
