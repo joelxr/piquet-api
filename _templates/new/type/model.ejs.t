@@ -1,10 +1,10 @@
 ---
-to: src/types/<%= name %>/<%= name %>.model.js
+to: src/types/<%= h.inflection.camelize(name, true) %>/<%= h.inflection.camelize(name, true) %>.model.js
 ---
 import mongoose from 'mongoose'
 
-const <%= name %>Schema = new mongoose.Schema({
+const <%= h.inflection.camelize(name, true) %>Schema = new mongoose.Schema({
   
 })
 
-export const <%= h.inflection.capitalize(name) %> = mongoose.model('<%= name %>', <%= name %>Schema)
+export const <%= h.inflection.camelize(name) %> = mongoose.model('<%= name %>', <%= h.inflection.camelize(name, true) %>Schema)

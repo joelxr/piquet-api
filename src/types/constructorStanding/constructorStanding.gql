@@ -1,0 +1,44 @@
+type ConstructorStanding {
+  constructorStandingsId: Int!
+  raceId: Int!
+  constructorId: Int!
+  points: Float!
+  position: Int
+  positionText: String
+  wins: Int!
+}
+
+input NewConstructorStandingInput {
+  constructorStandingsId: Int!
+  raceId: Int!
+  constructorId: Int!
+  points: Float!
+  position: Int
+  positionText: String
+  wins: Int!
+}
+
+input UpdateConstructorStandingInput {
+  constructorStandingsId: Int
+  raceId: Int
+  constructorId: Int
+  points: Float
+  position: Int
+  positionText: String
+  wins: Int
+}
+
+extend type Query {
+  constructorStandings: [ConstructorStanding]!
+  constructorStanding(id: ID!): ConstructorStanding!
+}
+
+extend type Mutation {
+  newConstructorStanding(
+    input: NewConstructorStandingInput!
+  ): ConstructorStanding!
+  updateConstructorStanding(
+    input: UpdateConstructorStandingInput!
+  ): ConstructorStanding!
+  removeConstructorStanding(id: ID!): ConstructorStanding!
+}

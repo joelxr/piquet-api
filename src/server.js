@@ -4,11 +4,15 @@ import { authenticate } from './utils/auth'
 import { merge } from 'lodash'
 import config from './config'
 import { connect } from './db'
+import constructorStanding from './types/constructorStanding/constructorStanding.resolvers'
+import constructorResult from './types/constructorResult/constructorResult.resolvers'
 import circuit from './types/circuit/circuit.resolvers'
 import driver from './types/driver/driver.resolvers'
 import user from './types/user/user.resolvers'
 
 const types = [
+  'constructorStanding',
+  'constructorResult',
   'driver',
   'circuit',
   'user'
@@ -27,7 +31,13 @@ export const start = async () => {
 
   const server = new ApolloServer({
     typeDefs: [rootSchema, ...schemaTypes],
-    resolvers: merge({}, driver, circuit, user),
+    resolvers: merge({},
+      constructorStanding,
+      constructorResult,
+      driver,
+      circuit,
+      user
+    ),
     async context({ req }) {
       const user = await authenticate(req)
       return { user }

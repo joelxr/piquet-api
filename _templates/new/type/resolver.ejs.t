@@ -1,66 +1,66 @@
 ---
-to: src/types/<%= name %>/<%= name %>.resolvers.js
+to: src/types/<%= h.inflection.camelize(name, true) %>/<%= h.inflection.camelize(name, true) %>.resolvers.js
 ---
 import { AuthenticationError } from 'apollo-server'
 import { roles } from '../../utils/auth'
-import { <%= h.inflection.capitalize(name) %> } from './<%= name %>.model'
+import { <%= h.inflection.camelize(name) %> } from './<%= h.inflection.camelize(name, true) %>.model'
 
-const <%= name %> = (_, args, ctx) => {
+const <%= h.inflection.camelize(name, true) %> = (_, args, ctx) => {
   if (!ctx.user) {
     throw new AuthenticationError()
   }
-  return <%= h.inflection.capitalize(name) %>.findById(args.id)
+  return <%= h.inflection.camelize(name) %>.findById(args.id)
     .lean()
     .exec()
 }
 
-const new<%= h.inflection.capitalize(name) %> = (_, args, ctx) => {
+const new<%= h.inflection.camelize(name) %> = (_, args, ctx) => {
   if (!ctx.user || ctx.user.role !== roles.admin) {
     throw new AuthenticationError()
   }
 
-  return <%= h.inflection.capitalize(name) %>.create({ ...args.input, createdBy: ctx.user._id })
+  return <%= h.inflection.camelize(name) %>.create({ ...args.input, createdBy: ctx.user._id })
 }
 
-const <%= h.inflection.pluralize(name) %> = (_, args, ctx) => {
+const <%= h.inflection.pluralize(h.inflection.camelize(name, true)) %> = (_, args, ctx) => {
   if (!ctx.user) {
     throw new AuthenticationError()
   }
 
-  return <%= h.inflection.capitalize(name) %>.find({})
+  return <%= h.inflection.camelize(name) %>.find({})
     .lean()
     .exec()
 }
 
-const update<%= h.inflection.capitalize(name) %> = (_, args, ctx) => {
+const update<%= h.inflection.camelize(name) %> = (_, args, ctx) => {
   if (!ctx.user || ctx.user.role !== roles.admin) {
     throw new AuthenticationError()
   }
 
   const update = args.input
-  return <%= h.inflection.capitalize(name) %>.findByIdAndUpdate(args.id, update, { new: true })
+  return <%= h.inflection.camelize(name) %>.findByIdAndUpdate(args.id, update, { new: true })
     .lean()
     .exec()
 }
 
-const remove<%= h.inflection.capitalize(name) %> = (_, args, ctx) => {
+const remove<%= h.inflection.camelize(name) %> = (_, args, ctx) => {
   if (!ctx.user || ctx.user.role !== roles.admin) {
     throw new AuthenticationError()
   }
 
-  return <%= h.inflection.capitalize(name) %>.findByIdAndRemove(args.id)
+  return <%= h.inflection.camelize(name) %>.findByIdAndRemove(args.id)
     .lean()
     .exec()
 }
 
 export default {
   Query: {
-    <%= h.inflection.pluralize(name) %>,
-    <%= name %>
+    <%= h.inflection.pluralize(h.inflection.camelize(name, true)) %>,
+    <%= h.inflection.camelize(name, true) %>
   },
   Mutation: {
-    new<%= h.inflection.capitalize(name) %>,
-    update<%= h.inflection.capitalize(name) %>,
-    remove<%= h.inflection.capitalize(name) %>
+    new<%= h.inflection.camelize(name) %>,
+    update<%= h.inflection.camelize(name) %>,
+    remove<%= h.inflection.camelize(name) %>
   }
 }
