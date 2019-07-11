@@ -1,0 +1,46 @@
+type Qualifying {
+  qualifyId: Int!
+  raceId: Int!
+  driverId: Int!
+  constructorId: Int!
+  number: Int!
+  position: Int
+  q1: String
+  q2: String
+  q3: String
+}
+
+input NewQualifyingInput {
+  qualifyId: Int!
+  raceId: Int!
+  driverId: Int!
+  constructorId: Int!
+  number: Int!
+  position: Int
+  q1: String
+  q2: String
+  q3: String
+}
+
+input UpdateQualifyingInput {
+  qualifyId: Int
+  raceId: Int
+  driverId: Int
+  constructorId: Int
+  number: Int
+  position: Int
+  q1: String
+  q2: String
+  q3: String
+}
+
+extend type Query {
+  qualifyings: [Qualifying]!
+  qualifying(id: ID!): Qualifying!
+}
+
+extend type Mutation {
+  newQualifying(input: NewQualifyingInput!): Qualifying!
+  updateQualifying(input: UpdateQualifyingInput!): Qualifying!
+  removeQualifying(id: ID!): Qualifying!
+}
