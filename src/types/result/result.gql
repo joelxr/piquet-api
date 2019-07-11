@@ -1,0 +1,73 @@
+type Result {
+  resultId: Int!
+  raceId: Int!
+  driverId: Int!
+  constructorId: Int!
+  number: Int
+  grid: Int!
+  position: Int
+  positionText: String!
+  positionOrder: Int!
+  points: Float!
+  laps: Int!
+  time: String
+  milliseconds: Int
+  fastestLap: Int
+  rank: Int
+  fastestLapTime: String
+  fastestLapSpeed: String
+  statusId: Int!
+}
+
+input NewResultInput {
+  resultId: Int!
+  raceId: Int!
+  driverId: Int!
+  constructorId: Int!
+  number: Int
+  grid: Int!
+  position: Int
+  positionText: String!
+  positionOrder: Int!
+  points: Float!
+  laps: Int!
+  time: String
+  milliseconds: Int
+  fastestLap: Int
+  rank: Int
+  fastestLapTime: String
+  fastestLapSpeed: String
+  statusId: Int!
+}
+
+input UpdateResultInput {
+  resultId: Int
+  raceId: Int
+  driverId: Int
+  constructorId: Int
+  number: Int
+  grid: Int
+  position: Int
+  positionText: String
+  positionOrder: Int
+  points: Float
+  laps: Int
+  time: String
+  milliseconds: Int
+  fastestLap: Int
+  rank: Int
+  fastestLapTime: String
+  fastestLapSpeed: String
+  statusId: Int
+}
+
+extend type Query {
+  results: [Result]!
+  result(id: ID!): Result!
+}
+
+extend type Mutation {
+  newResult(input: NewResultInput!): Result!
+  updateResult(input: UpdateResultInput!): Result!
+  removeResult(id: ID!): Result!
+}
