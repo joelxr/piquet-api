@@ -4,6 +4,8 @@ import { authenticate } from './utils/auth'
 import { merge } from 'lodash'
 import config from './config'
 import { connect } from './db'
+import status from './types/status/status.resolvers'
+import season from './types/season/season.resolvers'
 import race from './types/race/race.resolvers'
 import qualifying from './types/qualifying/qualifying.resolvers'
 import pitStop from './types/pitStop/pitStop.resolvers'
@@ -17,6 +19,8 @@ import driver from './types/driver/driver.resolvers'
 import user from './types/user/user.resolvers'
 
 const types = [
+  'status',
+  'season',
   'race',
   'qualifying',
   'pitStop',
@@ -44,6 +48,8 @@ export const start = async () => {
   const server = new ApolloServer({
     typeDefs: [rootSchema, ...schemaTypes],
     resolvers: merge({},
+      status,
+      season,
       race,
       qualifying,
       pitStop,

@@ -1,0 +1,25 @@
+type Status {
+  statusId: Int!
+  status: String!
+}
+
+input NewStatusInput {
+  statusId: Int!
+  status: String!
+}
+
+input UpdateStatusInput {
+  statusId: Int
+  status: String
+}
+
+extend type Query {
+  statuses: [Status]!
+  status(id: ID!): Status!
+}
+
+extend type Mutation {
+  newStatus(input: NewStatusInput!): Status!
+  updateStatus(input: UpdateStatusInput!): Status!
+  removeStatus(id: ID!): Status!
+}
