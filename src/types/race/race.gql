@@ -1,0 +1,43 @@
+type Race {
+  raceId: Int!
+  year: Int!
+  round: Int!
+  circuitId: Int!
+  name: String!
+  date: Date!
+  time: String
+  url: String
+}
+
+input NewRaceInput {
+  raceId: Int!
+  year: Int!
+  round: Int!
+  circuitId: Int!
+  name: String!
+  date: Date!
+  time: String
+  url: String
+}
+
+input UpdateRaceInput {
+  raceId: Int
+  year: Int
+  round: Int
+  circuitId: Int
+  name: String
+  date: Date
+  time: String
+  url: String
+}
+
+extend type Query {
+  races: [Race]!
+  race(id: ID!): Race!
+}
+
+extend type Mutation {
+  newRace(input: NewRaceInput!): Race!
+  updateRace(input: UpdateRaceInput!): Race!
+  removeRace(id: ID!): Race!
+}
