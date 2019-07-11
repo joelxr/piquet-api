@@ -1,0 +1,34 @@
+type Constructor {
+  constructorId: Int!
+  constructorRef: String!
+  name: String!
+  nationality: String
+  url: String!
+}
+
+input NewConstructorInput {
+  constructorId: Int!
+  constructorRef: String!
+  name: String!
+  nationality: String
+  url: String!
+}
+
+input UpdateConstructorInput {
+  constructorId: Int
+  constructorRef: String
+  name: String
+  nationality: String
+  url: String
+}
+
+extend type Query {
+  constructors: [Constructor]!
+  constructor(id: ID!): Constructor!
+}
+
+extend type Mutation {
+  newConstructor(input: NewConstructorInput!): Constructor!
+  updateConstructor(input: UpdateConstructorInput!): Constructor!
+  removeConstructor(id: ID!): Constructor!
+}
