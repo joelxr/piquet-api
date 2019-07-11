@@ -1,0 +1,40 @@
+type DriverStanding {
+  driverStandingsId: Int!
+  raceId: Int!
+  driverId: Int!
+  points: Float!
+  position: Int
+  positionText: String
+  wins: Int!
+}
+
+input NewDriverStandingInput {
+  driverStandingsId: Int!
+  raceId: Int!
+  driverId: Int!
+  points: Float!
+  position: Int
+  positionText: String
+  wins: Int!
+}
+
+input UpdateDriverStandingInput {
+  driverStandingsId: Int
+  raceId: Int
+  driverId: Int
+  points: Float
+  position: Int
+  positionText: String
+  wins: Int
+}
+
+extend type Query {
+  driverStandings: [DriverStanding]!
+  driverStanding(id: ID!): DriverStanding!
+}
+
+extend type Mutation {
+  newDriverStanding(input: NewDriverStandingInput!): DriverStanding!
+  updateDriverStanding(input: UpdateDriverStandingInput!): DriverStanding!
+  removeDriverStanding(id: ID!): DriverStanding!
+}

@@ -1,0 +1,37 @@
+type LapTime {
+  raceId: Int!
+  driverId: Int!
+  lap: Int!
+  position: Int
+  time: String
+  milliseconds: Int
+}
+
+input NewLapTimeInput {
+  raceId: Int!
+  driverId: Int!
+  lap: Int!
+  position: Int
+  time: String
+  milliseconds: Int
+}
+
+input UpdateLapTimeInput {
+  raceId: Int
+  driverId: Int
+  lap: Int
+  position: Int
+  time: String
+  milliseconds: Int
+}
+
+extend type Query {
+  lapTimes: [LapTime]!
+  lapTime(id: ID!): LapTime!
+}
+
+extend type Mutation {
+  newLapTime(input: NewLapTimeInput!): LapTime!
+  updateLapTime(input: UpdateLapTimeInput!): LapTime!
+  removeLapTime(id: ID!): LapTime!
+}
