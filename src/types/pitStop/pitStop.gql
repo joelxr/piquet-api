@@ -1,0 +1,40 @@
+type PitStop {
+  raceId: Int!
+  driverId: Int!
+  stop: Int!
+  lap: Int!
+  time: String!
+  duration: Float
+  milliseconds: Int
+}
+
+input NewPitStopInput {
+  raceId: Int!
+  driverId: Int!
+  stop: Int!
+  lap: Int!
+  time: String!
+  duration: Float
+  milliseconds: Int
+}
+
+input UpdatePitStopInput {
+  raceId: Int
+  driverId: Int
+  stop: Int
+  lap: Int
+  time: String
+  duration: Float
+  milliseconds: Int
+}
+
+extend type Query {
+  pitStops: [PitStop]!
+  pitStop(id: ID!): PitStop!
+}
+
+extend type Mutation {
+  newPitStop(input: NewPitStopInput!): PitStop!
+  updatePitStop(input: UpdatePitStopInput!): PitStop!
+  removePitStop(id: ID!): PitStop!
+}
