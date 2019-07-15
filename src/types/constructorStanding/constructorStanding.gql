@@ -1,7 +1,7 @@
 type ConstructorStanding {
   constructorStandingsId: Int!
-  raceId: Int!
-  constructorId: Int!
+  race: Race!
+  constructor: Constructor!
   points: Float!
   position: Int
   positionText: String
@@ -19,6 +19,15 @@ input NewConstructorStandingInput {
 }
 
 input UpdateConstructorStandingInput {
+  raceId: Int
+  constructorId: Int
+  points: Float
+  position: Int
+  positionText: String
+  wins: Int
+}
+
+input FilterConstructorStandingInput {
   constructorStandingsId: Int
   raceId: Int
   constructorId: Int
@@ -29,8 +38,12 @@ input UpdateConstructorStandingInput {
 }
 
 extend type Query {
-  constructorStandings: [ConstructorStanding]!
-  constructorStanding(id: ID!): ConstructorStanding!
+  constructorStandings(
+    skip: Int
+    limit: Int
+    filter: FilterConstructorStandingInput
+  ): [ConstructorStanding]!
+  constructorStanding(constructorStandingsId: Int!): ConstructorStanding!
 }
 
 extend type Mutation {
@@ -38,7 +51,8 @@ extend type Mutation {
     input: NewConstructorStandingInput!
   ): ConstructorStanding!
   updateConstructorStanding(
+    constructorStandingsId: Int!
     input: UpdateConstructorStandingInput!
   ): ConstructorStanding!
-  removeConstructorStanding(id: ID!): ConstructorStanding!
+  removeConstructorStanding(constructorStandingsId: Int!): ConstructorStanding!
 }

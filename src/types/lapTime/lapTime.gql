@@ -1,6 +1,8 @@
 type LapTime {
   raceId: Int!
+  race: Race!
   driverId: Int!
+  driver: Driver!
   lap: Int!
   position: Int
   time: String
@@ -17,6 +19,12 @@ input NewLapTimeInput {
 }
 
 input UpdateLapTimeInput {
+  position: Int
+  time: String
+  milliseconds: Int
+}
+
+input FilterLapTimeInput {
   raceId: Int
   driverId: Int
   lap: Int
@@ -26,12 +34,17 @@ input UpdateLapTimeInput {
 }
 
 extend type Query {
-  lapTimes: [LapTime]!
-  lapTime(id: ID!): LapTime!
+  lapTimes(filter: FilterLapTimeInput, skip: Int, limit: Int): [LapTime]!
+  lapTime(driverId: Int!, raceId: Int!, lap: Int!): LapTime!
 }
 
 extend type Mutation {
   newLapTime(input: NewLapTimeInput!): LapTime!
-  updateLapTime(input: UpdateLapTimeInput!): LapTime!
-  removeLapTime(id: ID!): LapTime!
+  updateLapTime(
+    driverId: Int!
+    raceId: Int!
+    lap: Int!
+    input: UpdateLapTimeInput!
+  ): LapTime!
+  removeLapTime(driverId: Int!, raceId: Int!, lap: Int!): LapTime!
 }

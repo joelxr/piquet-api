@@ -9,17 +9,21 @@ input NewSeasonInput {
 }
 
 input UpdateSeasonInput {
+  url: String
+}
+
+input FilterSeasonInput {
   year: Int
   url: String
 }
 
 extend type Query {
-  seasons: [Season]!
-  season(id: ID!): Season!
+  seasons(skip: Int, limit: Int, filter: FilterSeasonInput): [Season]!
+  season(year: Int!): Season!
 }
 
 extend type Mutation {
   newSeason(input: NewSeasonInput!): Season!
-  updateSeason(input: UpdateSeasonInput!): Season!
-  removeSeason(id: ID!): Season!
+  updateSeason(year: Int!, input: UpdateSeasonInput!): Season!
+  removeSeason(year: Int!): Season!
 }

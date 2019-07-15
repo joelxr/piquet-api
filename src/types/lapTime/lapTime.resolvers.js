@@ -1,12 +1,20 @@
 import { AuthenticationError } from 'apollo-server'
 import { roles } from '../../utils/auth'
 import { LapTime } from './lapTime.model'
+import { joinDriver } from '../driver/driver.resolvers'
+import { joinRace } from '../race/race.resolvers'
+import { LIMIT, SKIP } from '../../utils/queryDefaults'
 
 const lapTime = (_, args, ctx) => {
   if (!ctx.user) {
     throw new AuthenticationError()
   }
-  return LapTime.findById(args.id)
+
+  return LapTime.findOne({
+    raceId: args.raceId,
+    driverId: args.driverId,
+    lap: args.lap
+  })
     .lean()
     .exec()
 }
@@ -24,9 +32,10 @@ const lapTimes = (_, args, ctx) => {
     throw new AuthenticationError()
   }
 
-  return LapTime.find({})
-    .lean()
-    .exec()
+  const query = LapTime.find(args.filter)
+  query.limit(args.limit || LIMIT)
+  query.skip(args.skip || SKIP)
+  return query.lean().exec()
 }
 
 const updateLapTime = (_, args, ctx) => {
@@ -59,5 +68,9 @@ export default {
     newLapTime,
     updateLapTime,
     removeLapTime
+  },
+  LapTime: {
+    race: joinRace,
+    driver: joinDriver
   }
 }

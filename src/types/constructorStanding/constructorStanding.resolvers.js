@@ -1,12 +1,17 @@
 import { AuthenticationError } from 'apollo-server'
 import { roles } from '../../utils/auth'
 import { ConstructorStanding } from './constructorStanding.model'
+import { joinRace } from '../race/race.resolvers'
+import { joinConstructor } from '../constructor/constructor.resolvers'
+import { LIMIT, SKIP } from '../../utils/queryDefaults'
 
 const constructorStanding = (_, args, ctx) => {
   if (!ctx.user) {
     throw new AuthenticationError()
   }
-  return ConstructorStanding.findById(args.id)
+  return ConstructorStanding.findOne({
+    constructorStandingsId: args.constructorStandingsId
+  })
     .lean()
     .exec()
 }
@@ -24,9 +29,10 @@ const constructorStandings = (_, args, ctx) => {
     throw new AuthenticationError()
   }
 
-  return ConstructorStanding.find({})
-    .lean()
-    .exec()
+  const query = ConstructorStanding.find(args.filter)
+  query.limit(args.limit || LIMIT)
+  query.skip(args.skip || SKIP)
+  return query.lean().exec()
 }
 
 const updateConstructorStanding = (_, args, ctx) => {
@@ -35,7 +41,11 @@ const updateConstructorStanding = (_, args, ctx) => {
   }
 
   const update = args.input
-  return ConstructorStanding.findByIdAndUpdate(args.id, update, { new: true })
+  return ConstructorStanding.findOneAndUpdate(
+    { constructorStandingsId: args.constructorStandingsId },
+    update,
+    { new: true }
+  )
     .lean()
     .exec()
 }
@@ -45,7 +55,9 @@ const removeConstructorStanding = (_, args, ctx) => {
     throw new AuthenticationError()
   }
 
-  return ConstructorStanding.findByIdAndRemove(args.id)
+  return ConstructorStanding.findOneAndRemove({
+    constructorStandingsId: args.constructorStandingsId
+  })
     .lean()
     .exec()
 }
@@ -59,5 +71,9 @@ export default {
     newConstructorStanding,
     updateConstructorStanding,
     removeConstructorStanding
+  },
+  ConstructorStanding: {
+    race: joinRace,
+    constructor: joinConstructor
   }
 }

@@ -1,12 +1,13 @@
 import { AuthenticationError } from 'apollo-server'
 import { roles } from '../../utils/auth'
 import { Constructor } from './constructor.model'
+import { LIMIT, SKIP } from '../../utils/queryDefaults'
 
 const constructor = (_, args, ctx) => {
   if (!ctx.user) {
     throw new AuthenticationError()
   }
-  return Constructor.findById(args.id)
+  return Constructor.findOne({ constructorId: args.constructorId })
     .lean()
     .exec()
 }
@@ -24,9 +25,10 @@ const constructors = (_, args, ctx) => {
     throw new AuthenticationError()
   }
 
-  return Constructor.find({})
-    .lean()
-    .exec()
+  const query = Constructor.find(args.filter)
+  query.limit(args.limit || LIMIT)
+  query.skip(args.skip || SKIP)
+  return query.lean().exec()
 }
 
 const updateConstructor = (_, args, ctx) => {
@@ -35,7 +37,11 @@ const updateConstructor = (_, args, ctx) => {
   }
 
   const update = args.input
-  return Constructor.findByIdAndUpdate(args.id, update, { new: true })
+  return Constructor.findOneAndUpdate(
+    { constructorId: args.constructorId },
+    update,
+    { new: true }
+  )
     .lean()
     .exec()
 }
@@ -45,7 +51,13 @@ const removeConstructor = (_, args, ctx) => {
     throw new AuthenticationError()
   }
 
-  return Constructor.findByIdAndRemove(args.id)
+  return Constructor.findOneAndRemove({ constructorId: args.constructorId })
+    .lean()
+    .exec()
+}
+
+export const joinConstructor = (_, args, ctx) => {
+  return Constructor.findOne({ constructorId: _.constructorId })
     .lean()
     .exec()
 }

@@ -1,6 +1,11 @@
 import { User } from '../types/user/user.model'
 import cuid from 'cuid'
 
+export const roles = {
+  admin: 'admin',
+  user: 'user'
+}
+
 export const newApiKey = () => {
   return cuid()
 }

@@ -9,17 +9,21 @@ input NewStatusInput {
 }
 
 input UpdateStatusInput {
+  status: String
+}
+
+input FilterStatusInput {
   statusId: Int
   status: String
 }
 
 extend type Query {
-  statuses: [Status]!
-  status(id: ID!): Status!
+  statuses(skip: Int, limit: Int, filter: FilterStatusInput): [Status]!
+  status(statusId: Int!): Status!
 }
 
 extend type Mutation {
   newStatus(input: NewStatusInput!): Status!
-  updateStatus(input: UpdateStatusInput!): Status!
-  removeStatus(id: ID!): Status!
+  updateStatus(statusId: Int!, input: UpdateStatusInput!): Status!
+  removeStatus(statusId: Int!): Status!
 }

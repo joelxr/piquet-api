@@ -1,12 +1,16 @@
 import { AuthenticationError } from 'apollo-server'
 import { roles } from '../../utils/auth'
+import { SKIP, LIMIT } from '../../utils/queryDefaults'
 import { Result } from './result.model'
+import { joinDriver } from '../driver/driver.resolvers'
+import { joinRace } from '../race/race.resolvers'
+import { joinConstructor } from '../constructor/constructor.resolvers'
 
 const result = (_, args, ctx) => {
   if (!ctx.user) {
     throw new AuthenticationError()
   }
-  return Result.findById(args.id)
+  return Result.findOne({ resultId: args.resultId })
     .lean()
     .exec()
 }
@@ -24,9 +28,10 @@ const results = (_, args, ctx) => {
     throw new AuthenticationError()
   }
 
-  return Result.find({})
-    .lean()
-    .exec()
+  const query = Result.find(args.filter)
+  query.limit(args.limit || LIMIT)
+  query.skip(args.skip || SKIP)
+  return query.lean().exec()
 }
 
 const updateResult = (_, args, ctx) => {
@@ -35,7 +40,9 @@ const updateResult = (_, args, ctx) => {
   }
 
   const update = args.input
-  return Result.findByIdAndUpdate(args.id, update, { new: true })
+  return Result.findOneAndUpdate({ resultId: args.resultId }, update, {
+    new: true
+  })
     .lean()
     .exec()
 }
@@ -45,7 +52,7 @@ const removeResult = (_, args, ctx) => {
     throw new AuthenticationError()
   }
 
-  return Result.findByIdAndRemove(args.id)
+  return Result.findOneAndRemove({ resultId: args.resultId })
     .lean()
     .exec()
 }
@@ -59,5 +66,10 @@ export default {
     newResult,
     updateResult,
     removeResult
+  },
+  Result: {
+    driver: joinDriver,
+    race: joinRace,
+    constructor: joinConstructor
   }
 }

@@ -20,7 +20,10 @@ import driver from './types/driver/driver.resolvers'
 import user from './types/user/user.resolvers'
 
 const types = [
-  'result',
+  'user',
+  'constructor',
+  'driver',
+  'circuit',
   'status',
   'season',
   'race',
@@ -28,12 +31,9 @@ const types = [
   'pitStop',
   'lapTime',
   'driverStanding',
-  'constructor',
   'constructorStanding',
   'constructorResult',
-  'driver',
-  'circuit',
-  'user'
+  'result',
 ]
 
 export const start = async () => {

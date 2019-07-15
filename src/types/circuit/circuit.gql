@@ -23,6 +23,17 @@ input NewCircuitInput {
 }
 
 input UpdateCircuitInput {
+  circuitRef: String
+  name: String
+  location: String
+  country: String
+  lat: Float
+  lng: Float
+  alt: Float
+  url: String
+}
+
+input FilterCircuitInput {
   circuitId: Int
   circuitRef: String
   name: String
@@ -35,12 +46,12 @@ input UpdateCircuitInput {
 }
 
 extend type Query {
-  circuits: [Circuit]!
-  circuit(id: ID!): Circuit!
+  circuits(skip: Int, limit: Int, filter: FilterCircuitInput): [Circuit]!
+  circuit(circuitId: ID!): Circuit!
 }
 
 extend type Mutation {
   newCircuit(input: NewCircuitInput!): Circuit!
-  updateCircuit(input: UpdateCircuitInput!): Circuit!
-  removeCircuit(id: ID!): Circuit!
+  updateCircuit(circuitId: ID!, input: UpdateCircuitInput!): Circuit!
+  removeCircuit(circuitId: ID!): Circuit!
 }

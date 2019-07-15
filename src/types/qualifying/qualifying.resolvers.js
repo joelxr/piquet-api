@@ -1,12 +1,16 @@
 import { AuthenticationError } from 'apollo-server'
 import { roles } from '../../utils/auth'
+import { SKIP, LIMIT } from '../../utils/queryDefaults'
 import { Qualifying } from './qualifying.model'
+import { joinDriver } from '../driver/driver.resolvers'
+import { joinRace } from '../race/race.resolvers'
+import { joinConstructor } from '../constructor/constructor.resolvers'
 
 const qualifying = (_, args, ctx) => {
   if (!ctx.user) {
     throw new AuthenticationError()
   }
-  return Qualifying.findById(args.id)
+  return Qualifying.findOne({ qualifyId: args.qualifyId })
     .lean()
     .exec()
 }
@@ -24,9 +28,10 @@ const qualifyings = (_, args, ctx) => {
     throw new AuthenticationError()
   }
 
-  return Qualifying.find({})
-    .lean()
-    .exec()
+  const query = Qualifying.find(args.filter)
+  query.limit(args.limit || LIMIT)
+  query.skip(args.skip || SKIP)
+  return query.lean().exec()
 }
 
 const updateQualifying = (_, args, ctx) => {
@@ -35,7 +40,9 @@ const updateQualifying = (_, args, ctx) => {
   }
 
   const update = args.input
-  return Qualifying.findByIdAndUpdate(args.id, update, { new: true })
+  return Qualifying.findOneAndUpdate({ qualifyId: args.qualifyId }, update, {
+    new: true
+  })
     .lean()
     .exec()
 }
@@ -45,7 +52,7 @@ const removeQualifying = (_, args, ctx) => {
     throw new AuthenticationError()
   }
 
-  return Qualifying.findByIdAndRemove(args.id)
+  return Qualifying.findOneAndRemove({ qualifyId: args.qualifyId })
     .lean()
     .exec()
 }
@@ -59,5 +66,10 @@ export default {
     newQualifying,
     updateQualifying,
     removeQualifying
+  },
+  Qualifying: {
+    race: joinRace,
+    driver: joinDriver,
+    constructor: joinConstructor
   }
 }

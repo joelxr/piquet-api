@@ -1,7 +1,8 @@
 type ConstructorResult {
   constructorResultsId: Int!
   raceId: Int!
-  constructorId: Int!
+  race: Race!
+  constructor: Constructor!
   points: Float
   status: String
 }
@@ -15,6 +16,13 @@ input NewConstructorResultInput {
 }
 
 input UpdateConstructorResultInput {
+  raceId: Int
+  constructorId: Int
+  points: Float
+  status: String
+}
+
+input FilterConstructorResultInput {
   constructorResultsId: Int
   raceId: Int
   constructorId: Int
@@ -23,14 +31,19 @@ input UpdateConstructorResultInput {
 }
 
 extend type Query {
-  constructorResults: [ConstructorResult]!
-  constructorResult(id: ID!): ConstructorResult!
+  constructorResults(
+    skip: Int
+    limit: Int
+    filter: FilterConstructorResultInput
+  ): [ConstructorResult]!
+  constructorResult(constructorResultsId: ID!): ConstructorResult!
 }
 
 extend type Mutation {
   newConstructorResult(input: NewConstructorResultInput!): ConstructorResult!
   updateConstructorResult(
+    constructorResultsId: ID!
     input: UpdateConstructorResultInput!
   ): ConstructorResult!
-  removeConstructorResult(id: ID!): ConstructorResult!
+  removeConstructorResult(constructorResultsId: ID!): ConstructorResult!
 }

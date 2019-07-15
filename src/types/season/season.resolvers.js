@@ -1,4 +1,5 @@
 import { AuthenticationError } from 'apollo-server'
+import { SKIP, LIMIT } from '../../utils/queryDefaults'
 import { roles } from '../../utils/auth'
 import { Season } from './season.model'
 
@@ -6,7 +7,7 @@ const season = (_, args, ctx) => {
   if (!ctx.user) {
     throw new AuthenticationError()
   }
-  return Season.findById(args.id)
+  return Season.findOne({ year: args.year })
     .lean()
     .exec()
 }
@@ -24,9 +25,10 @@ const seasons = (_, args, ctx) => {
     throw new AuthenticationError()
   }
 
-  return Season.find({})
-    .lean()
-    .exec()
+  const query = Season.find(args.filter)
+  query.limit(args.limit || LIMIT)
+  query.skip(args.skip || SKIP)
+  return query.lean().exec()
 }
 
 const updateSeason = (_, args, ctx) => {
@@ -35,7 +37,7 @@ const updateSeason = (_, args, ctx) => {
   }
 
   const update = args.input
-  return Season.findByIdAndUpdate(args.id, update, { new: true })
+  return Season.findOneAndUpdate({ year: args.year }, update, { new: true })
     .lean()
     .exec()
 }
@@ -45,7 +47,7 @@ const removeSeason = (_, args, ctx) => {
     throw new AuthenticationError()
   }
 
-  return Season.findByIdAndRemove(args.id)
+  return Season.findOneAndRemove({ year: args.year })
     .lean()
     .exec()
 }

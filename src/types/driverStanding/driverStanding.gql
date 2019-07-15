@@ -1,7 +1,9 @@
 type DriverStanding {
   driverStandingsId: Int!
   raceId: Int!
+  race: Race!
   driverId: Int!
+  driver: Driver!
   points: Float!
   position: Int
   positionText: String
@@ -19,6 +21,15 @@ input NewDriverStandingInput {
 }
 
 input UpdateDriverStandingInput {
+  raceId: Int
+  driverId: Int
+  points: Float
+  position: Int
+  positionText: String
+  wins: Int
+}
+
+input FilterDriverStandingInput {
   driverStandingsId: Int
   raceId: Int
   driverId: Int
@@ -29,12 +40,19 @@ input UpdateDriverStandingInput {
 }
 
 extend type Query {
-  driverStandings: [DriverStanding]!
-  driverStanding(id: ID!): DriverStanding!
+  driverStandings(
+    skip: Int
+    limit: Int
+    filter: FilterDriverStandingInput
+  ): [DriverStanding]!
+  driverStanding(driverStandingsId: ID!): DriverStanding!
 }
 
 extend type Mutation {
   newDriverStanding(input: NewDriverStandingInput!): DriverStanding!
-  updateDriverStanding(input: UpdateDriverStandingInput!): DriverStanding!
-  removeDriverStanding(id: ID!): DriverStanding!
+  updateDriverStanding(
+    driverStandingsId: Int!
+    input: UpdateDriverStandingInput!
+  ): DriverStanding!
+  removeDriverStanding(driverStandingsId: ID!): DriverStanding!
 }

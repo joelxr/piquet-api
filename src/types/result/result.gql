@@ -1,8 +1,11 @@
 type Result {
   resultId: Int!
   raceId: Int!
+  race: Race!
   driverId: Int!
+  driver: Driver!
   constructorId: Int!
+  constructor: Constructor!
   number: Int
   grid: Int!
   position: Int
@@ -15,7 +18,7 @@ type Result {
   fastestLap: Int
   rank: Int
   fastestLapTime: String
-  fastestLapSpeed: String
+  fastestLapSpeed: Float
   statusId: Int!
 }
 
@@ -36,11 +39,31 @@ input NewResultInput {
   fastestLap: Int
   rank: Int
   fastestLapTime: String
-  fastestLapSpeed: String
+  fastestLapSpeed: Float
   statusId: Int!
 }
 
 input UpdateResultInput {
+  raceId: Int
+  driverId: Int
+  constructorId: Int
+  number: Int
+  grid: Int
+  position: Int
+  positionText: String
+  positionOrder: Int
+  points: Float
+  laps: Int
+  time: String
+  milliseconds: Int
+  fastestLap: Int
+  rank: Int
+  fastestLapTime: String
+  fastestLapSpeed: Float
+  statusId: Int
+}
+
+input FilterResultInput {
   resultId: Int
   raceId: Int
   driverId: Int
@@ -57,17 +80,17 @@ input UpdateResultInput {
   fastestLap: Int
   rank: Int
   fastestLapTime: String
-  fastestLapSpeed: String
+  fastestLapSpeed: Float
   statusId: Int
 }
 
 extend type Query {
-  results: [Result]!
-  result(id: ID!): Result!
+  results(skip: Int, limit: Int, filter: FilterResultInput): [Result]!
+  result(resultId: Int!): Result!
 }
 
 extend type Mutation {
   newResult(input: NewResultInput!): Result!
-  updateResult(input: UpdateResultInput!): Result!
-  removeResult(id: ID!): Result!
+  updateResult(resultId: Int!, input: UpdateResultInput!): Result!
+  removeResult(resultId: Int!): Result!
 }

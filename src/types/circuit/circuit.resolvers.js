@@ -1,12 +1,13 @@
 import { Circuit } from './circuit.model'
 import { AuthenticationError } from 'apollo-server'
 import { roles } from '../../utils/auth'
+import { LIMIT, SKIP } from '../../utils/queryDefaults'
 
 const circuit = (_, args, ctx) => {
   if (!ctx.user) {
     throw new AuthenticationError()
   }
-  return Circuit.findById(args.id)
+  return Circuit.findOne({ circuitId: args.circuitId })
     .lean()
     .exec()
 }
@@ -24,9 +25,10 @@ const circuits = (_, args, ctx) => {
     throw new AuthenticationError()
   }
 
-  return Circuit.find({})
-    .lean()
-    .exec()
+  const query = Circuit.find(args.filter)
+  query.limit(args.limit || LIMIT)
+  query.skip(args.skip || SKIP)
+  return query.lean().exec()
 }
 
 const updateCircuit = (_, args, ctx) => {
@@ -35,7 +37,9 @@ const updateCircuit = (_, args, ctx) => {
   }
 
   const update = args.input
-  return Circuit.findByIdAndUpdate(args.id, update, { new: true })
+  return Circuit.findOneAndUpdate({ circuitId: args.circuitId }, update, {
+    new: true
+  })
     .lean()
     .exec()
 }
@@ -45,7 +49,13 @@ const removeCircuit = (_, args, ctx) => {
     throw new AuthenticationError()
   }
 
-  return Circuit.findByIdAndRemove(args.id)
+  return Circuit.findOneAndRemove({ circuitId: args.circuitId })
+    .lean()
+    .exec()
+}
+
+export const joinCircuit = (_, args, ctx) => {
+  return Circuit.findOne({ circuitId: _.circuitId })
     .lean()
     .exec()
 }

@@ -1,12 +1,13 @@
 import { AuthenticationError } from 'apollo-server'
 import { roles } from '../../utils/auth'
+import { SKIP, LIMIT } from '../../utils/queryDefaults'
 import { Driver } from './driver.model'
 
 const driver = (_, args, ctx) => {
   if (!ctx.user) {
     throw new AuthenticationError()
   }
-  return Driver.findById(args.id)
+  return Driver.findOne({ driverId: args.driverId })
     .lean()
     .exec()
 }
@@ -24,9 +25,10 @@ const drivers = (_, args, ctx) => {
     throw new AuthenticationError()
   }
 
-  return Driver.find({})
-    .lean()
-    .exec()
+  const query = Driver.find(args.filter)
+  query.limit(args.limit || LIMIT)
+  query.skip(args.skip || SKIP)
+  return query.lean().exec()
 }
 
 const updateDriver = (_, args, ctx) => {
@@ -35,7 +37,9 @@ const updateDriver = (_, args, ctx) => {
   }
 
   const update = args.input
-  return Driver.findByIdAndUpdate(args.id, update, { new: true })
+  return Driver.findOneAndUpdate({ driverId: args.driverId }, update, {
+    new: true
+  })
     .lean()
     .exec()
 }
@@ -45,7 +49,13 @@ const removeDriver = (_, args, ctx) => {
     throw new AuthenticationError()
   }
 
-  return Driver.findByIdAndRemove(args.id)
+  return Driver.findOneAndRemove({ driverId: args.driverId })
+    .lean()
+    .exec()
+}
+
+export const joinDriver = async (_, args, ctx) => {
+  return Driver.findOne({ driverId: _.driverId })
     .lean()
     .exec()
 }

@@ -15,6 +15,13 @@ input NewConstructorInput {
 }
 
 input UpdateConstructorInput {
+  constructorRef: String
+  name: String
+  nationality: String
+  url: String
+}
+
+input FilterConstructorInput {
   constructorId: Int
   constructorRef: String
   name: String
@@ -23,12 +30,19 @@ input UpdateConstructorInput {
 }
 
 extend type Query {
-  constructors: [Constructor]!
-  constructor(id: ID!): Constructor!
+  constructors(
+    skip: Int
+    limit: Int
+    filter: FilterConstructorInput
+  ): [Constructor]!
+  constructor(constructorId: ID!): Constructor!
 }
 
 extend type Mutation {
   newConstructor(input: NewConstructorInput!): Constructor!
-  updateConstructor(input: UpdateConstructorInput!): Constructor!
-  removeConstructor(id: ID!): Constructor!
+  updateConstructor(
+    constructorId: ID!
+    input: UpdateConstructorInput!
+  ): Constructor!
+  removeConstructor(constructorId: ID!): Constructor!
 }

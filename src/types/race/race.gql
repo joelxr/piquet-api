@@ -3,6 +3,7 @@ type Race {
   year: Int!
   round: Int!
   circuitId: Int!
+  circuit: Circuit!
   name: String!
   date: Date!
   time: String
@@ -21,6 +22,16 @@ input NewRaceInput {
 }
 
 input UpdateRaceInput {
+  year: Int
+  round: Int
+  circuitId: Int
+  name: String
+  date: Date
+  time: String
+  url: String
+}
+
+input FilterRaceInput {
   raceId: Int
   year: Int
   round: Int
@@ -32,12 +43,12 @@ input UpdateRaceInput {
 }
 
 extend type Query {
-  races: [Race]!
-  race(id: ID!): Race!
+  races(skip: Int, limit: Int, filter: FilterRaceInput): [Race]!
+  race(raceId: ID!): Race!
 }
 
 extend type Mutation {
   newRace(input: NewRaceInput!): Race!
-  updateRace(input: UpdateRaceInput!): Race!
-  removeRace(id: ID!): Race!
+  updateRace(raceId: ID!, input: UpdateRaceInput!): Race!
+  removeRace(raceId: Int!): Race!
 }

@@ -23,6 +23,17 @@ input NewDriverInput {
 }
 
 input UpdateDriverInput {
+  driverRef: String
+  number: Int
+  code: String
+  forename: String
+  surname: String
+  dob: Date
+  nationality: String
+  url: String
+}
+
+input FilterDriverInput {
   driverId: Int
   driverRef: String
   number: Int
@@ -35,12 +46,12 @@ input UpdateDriverInput {
 }
 
 extend type Query {
-  drivers: [Driver]
-  driver(id: ID!): Driver!
+  drivers(skip: Int, limit: Int, filter: FilterDriverInput): [Driver]
+  driver(driverId: ID!): Driver!
 }
 
 extend type Mutation {
   newDriver(input: NewDriverInput!): Driver!
-  updateDriver(input: UpdateDriverInput!): Driver!
-  removeDriver(id: ID!): Driver!
+  updateDriver(driverId: ID!, input: UpdateDriverInput!): Driver!
+  removeDriver(driverId: ID!): Driver!
 }
