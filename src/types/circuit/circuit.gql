@@ -8,6 +8,7 @@ type Circuit {
   lng: Float
   alt: Float
   url: String!
+  races(filter: FilterRaceInput): [Race]
 }
 
 input NewCircuitInput {
@@ -47,7 +48,7 @@ input FilterCircuitInput {
 
 extend type Query {
   circuits(skip: Int, limit: Int, filter: FilterCircuitInput): [Circuit]!
-  circuit(circuitId: ID!): Circuit!
+  circuit(filter: FilterCircuitInput!): Circuit!
 }
 
 extend type Mutation {

@@ -1,11 +1,11 @@
 type Result {
   resultId: Int!
   raceId: Int!
-  race: Race!
+  race(filter: FilterRaceInput): Race
   driverId: Int!
-  driver: Driver!
+  driver(filter: FilterDriverInput): Driver
   constructorId: Int!
-  constructor: Constructor!
+  constructor(filter: FilterConstructorInput): Constructor
   number: Int
   grid: Int!
   position: Int
@@ -86,7 +86,7 @@ input FilterResultInput {
 
 extend type Query {
   results(skip: Int, limit: Int, filter: FilterResultInput): [Result]!
-  result(resultId: Int!): Result!
+  result(filter: FilterResultInput!): Result!
 }
 
 extend type Mutation {

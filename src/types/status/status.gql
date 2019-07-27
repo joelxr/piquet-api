@@ -19,7 +19,7 @@ input FilterStatusInput {
 
 extend type Query {
   statuses(skip: Int, limit: Int, filter: FilterStatusInput): [Status]!
-  status(statusId: Int!): Status!
+  status(filter: FilterStatusInput!): Status!
 }
 
 extend type Mutation {

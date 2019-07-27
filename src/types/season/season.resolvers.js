@@ -7,7 +7,7 @@ const season = (_, args, ctx) => {
   if (!ctx.user) {
     throw new AuthenticationError()
   }
-  return Season.findOne({ year: args.year })
+  return Season.findOne(args.filter)
     .lean()
     .exec()
 }

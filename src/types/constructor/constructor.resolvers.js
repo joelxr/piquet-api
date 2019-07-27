@@ -2,12 +2,17 @@ import { AuthenticationError } from 'apollo-server'
 import { roles } from '../../utils/auth'
 import { Constructor } from './constructor.model'
 import { LIMIT, SKIP } from '../../utils/queryDefaults'
+import { qualifyings } from '../qualifying/qualifying.resolvers'
+import { pitStops } from '../pitStop/pitStop.resolvers'
+import { results } from '../result/result.resolvers'
+import { constructorStandings } from '../constructorStanding/constructorStanding.resolvers'
+import { constructorResults } from '../constructorResult/constructorResult.resolvers'
 
-const constructor = (_, args, ctx) => {
+export const constructor = (_, args, ctx) => {
   if (!ctx.user) {
     throw new AuthenticationError()
   }
-  return Constructor.findOne({ constructorId: args.constructorId })
+  return Constructor.findOne(args.filter)
     .lean()
     .exec()
 }
@@ -56,12 +61,6 @@ const removeConstructor = (_, args, ctx) => {
     .exec()
 }
 
-export const joinConstructor = (_, args, ctx) => {
-  return Constructor.findOne({ constructorId: _.constructorId })
-    .lean()
-    .exec()
-}
-
 export default {
   Query: {
     constructors,
@@ -71,5 +70,68 @@ export default {
     newConstructor,
     updateConstructor,
     removeConstructor
+  },
+  Constructor: {
+    constructorResults(_, args, ctx) {
+      return constructorResults.call(
+        this,
+        _,
+
+        {
+          skip: args.skip,
+          limit: args.limit,
+          filter: { constructorId: _.constructorId, ...args.filter }
+        },
+        ctx
+      )
+    },
+    constructorStandings(_, args, ctx) {
+      return constructorStandings.call(
+        this,
+        _,
+        {
+          skip: args.skip,
+          limit: args.limit,
+          filter: { constructorId: _.constructorId, ...args.filter }
+        },
+        ctx
+      )
+    },
+    qualifyings(_, args, ctx) {
+      return qualifyings.call(
+        this,
+        _,
+        {
+          skip: args.skip,
+          limit: args.limit,
+          filter: { constructorId: _.constructorId, ...args.filter }
+        },
+        ctx
+      )
+    },
+    pitStops(_, args, ctx) {
+      return pitStops.call(
+        this,
+        _,
+        {
+          skip: args.skip,
+          limit: args.limit,
+          filter: { constructorId: _.constructorId, ...args.filter }
+        },
+        ctx
+      )
+    },
+    results(_, args, ctx) {
+      return results.call(
+        this,
+        _,
+        {
+          skip: args.skip,
+          limit: args.limit,
+          filter: { constructorId: _.constructorId, ...args.filter }
+        },
+        ctx
+      )
+    }
   }
 }

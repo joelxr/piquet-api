@@ -2,16 +2,14 @@ import { AuthenticationError } from 'apollo-server'
 import { roles } from '../../utils/auth'
 import { SKIP, LIMIT } from '../../utils/queryDefaults'
 import { DriverStanding } from './driverStanding.model'
-import { joinDriver } from '../driver/driver.resolvers'
-import { joinRace } from '../race/race.resolvers'
+import { driver } from '../driver/driver.resolvers'
+import { race } from '../race/race.resolvers'
 
 const driverStanding = (_, args, ctx) => {
   if (!ctx.user) {
     throw new AuthenticationError()
   }
-  return DriverStanding.findOne({
-    driverStandingsId: args.driverStandingsId
-  })
+  return DriverStanding.findOne(args.filter)
     .lean()
     .exec()
 }
@@ -24,7 +22,7 @@ const newDriverStanding = (_, args, ctx) => {
   return DriverStanding.create({ ...args.input, createdBy: ctx.user._id })
 }
 
-const driverStandings = (_, args, ctx) => {
+export const driverStandings = (_, args, ctx) => {
   if (!ctx.user) {
     throw new AuthenticationError()
   }
@@ -73,7 +71,21 @@ export default {
     removeDriverStanding
   },
   DriverStanding: {
-    driver: joinDriver,
-    race: joinRace
+    driver(_, args, ctx) {
+      return driver.call(
+        this,
+        _,
+        { filter: { driverId: _.driverId, ...args.filter } },
+        ctx
+      )
+    },
+    race(_, args, ctx) {
+      return race.call(
+        this,
+        _,
+        { filter: { raceId: _.raceId, ...args.filter } },
+        ctx
+      )
+    }
   }
 }

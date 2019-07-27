@@ -1,17 +1,15 @@
 import { AuthenticationError } from 'apollo-server'
 import { roles } from '../../utils/auth'
 import { ConstructorResult } from './constructorResult.model'
-import { joinRace } from '../race/race.resolvers'
-import { joinConstructor } from '../constructor/constructor.resolvers'
+import { race } from '../race/race.resolvers'
+import { constructor } from '../constructor/constructor.resolvers'
 import { LIMIT, SKIP } from '../../utils/queryDefaults'
 
 const constructorResult = (_, args, ctx) => {
   if (!ctx.user) {
     throw new AuthenticationError()
   }
-  return ConstructorResult.findOne({
-    constructorResultsId: args.constructorResultsId
-  })
+  return ConstructorResult.findOne(args.filter)
     .lean()
     .exec()
 }
@@ -24,7 +22,7 @@ const newConstructorResult = (_, args, ctx) => {
   return ConstructorResult.create({ ...args.input, createdBy: ctx.user._id })
 }
 
-const constructorResults = (_, args, ctx) => {
+export const constructorResults = (_, args, ctx) => {
   if (!ctx.user) {
     throw new AuthenticationError()
   }
@@ -73,7 +71,21 @@ export default {
     removeConstructorResult
   },
   ConstructorResult: {
-    race: joinRace,
-    constructor: joinConstructor
+    race(_, args, ctx) {
+      return race.call(
+        this,
+        _,
+        { filter: { raceId: _.raceId, ...args.filter } },
+        ctx
+      )
+    },
+    constructor(_, args, ctx) {
+      return constructor.call(
+        this,
+        _,
+        { filter: { constructorId: _.constructorId, ...args.filter } },
+        ctx
+      )
+    }
   }
 }

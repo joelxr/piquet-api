@@ -8,6 +8,19 @@ type Driver {
   dob: Date
   nationality: String
   url: String
+  driverStandings(
+    skip: Int
+    limit: Int
+    filter: FilterDriverStandingInput
+  ): [DriverStanding]
+  qualifyings(
+    skip: Int
+    limit: Int
+    filter: FilterQualifyingInput
+  ): [Qualifying]
+  pitStops(skip: Int, limit: Int, filter: FilterPitStopInput): [PitStop]
+  lapTimes(skip: Int, limit: Int, filter: FilterLapTimeInput): [LapTime]
+  results(skip: Int, limit: Int, filter: FilterResultInput): [Result]
 }
 
 input NewDriverInput {
@@ -47,7 +60,7 @@ input FilterDriverInput {
 
 extend type Query {
   drivers(skip: Int, limit: Int, filter: FilterDriverInput): [Driver]
-  driver(driverId: ID!): Driver!
+  driver(filter: FilterDriverInput!): Driver!
 }
 
 extend type Mutation {

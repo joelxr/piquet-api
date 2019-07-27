@@ -33,7 +33,7 @@ const types = [
   'driverStanding',
   'constructorStanding',
   'constructorResult',
-  'result',
+  'result'
 ]
 
 export const start = async () => {
@@ -49,7 +49,8 @@ export const start = async () => {
 
   const server = new ApolloServer({
     typeDefs: [rootSchema, ...schemaTypes],
-    resolvers: merge({},
+    resolvers: merge(
+      {},
       result,
       status,
       season,

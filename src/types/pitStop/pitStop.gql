@@ -1,8 +1,8 @@
 type PitStop {
   raceId: Int!
-  race: Race!
+  race(filter: FilterRaceInput): Race
   driverId: Int!
-  driver: Driver!
+  driver(filter: FilterDriverInput): Driver
   stop: Int!
   lap: Int!
   time: String!
@@ -40,7 +40,7 @@ input FilterPitStopInput {
 
 extend type Query {
   pitStops(skip: Int, limit: Int, filter: FilterPitStopInput): [PitStop]!
-  pitStop(raceId: Int!, driverId: Int!, stop: Int!): PitStop!
+  pitStop(filter: FilterPitStopInput!): PitStop!
 }
 
 extend type Mutation {

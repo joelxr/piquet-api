@@ -1,9 +1,9 @@
 type DriverStanding {
   driverStandingsId: Int!
   raceId: Int!
-  race: Race!
+  race(filter: FilterRaceInput): Race
   driverId: Int!
-  driver: Driver!
+  driver(filter: FilterDriverInput): Driver
   points: Float!
   position: Int
   positionText: String
@@ -45,7 +45,7 @@ extend type Query {
     limit: Int
     filter: FilterDriverStandingInput
   ): [DriverStanding]!
-  driverStanding(driverStandingsId: ID!): DriverStanding!
+  driverStanding(filter: FilterDriverStandingInput!): DriverStanding!
 }
 
 extend type Mutation {

@@ -2,13 +2,20 @@ import { AuthenticationError } from 'apollo-server'
 import { roles } from '../../utils/auth'
 import { SKIP, LIMIT } from '../../utils/queryDefaults'
 import { Race } from './race.model'
-import { joinCircuit } from '../circuit/circuit.resolvers'
+import { circuit } from '../circuit/circuit.resolvers'
+import { constructorStandings } from '../constructorStanding/constructorStanding.resolvers'
+import { driverStandings } from '../driverStanding/driverStanding.resolvers'
+import { qualifyings } from '../qualifying/qualifying.resolvers'
+import { lapTimes } from '../lapTime/lapTime.resolvers'
+import { results } from '../result/result.resolvers'
+import { pitStops } from '../pitStop/pitStop.resolvers'
 
-const race = (_, args, ctx) => {
+export const race = (_, args, ctx) => {
   if (!ctx.user) {
     throw new AuthenticationError()
   }
-  return Race.findOne({ raceId: args.raceId })
+
+  return Race.findOne(args.filter)
     .lean()
     .exec()
 }
@@ -21,7 +28,7 @@ const newRace = (_, args, ctx) => {
   return Race.create({ ...args.input, createdBy: ctx.user._id })
 }
 
-const races = (_, args, ctx) => {
+export const races = (_, args, ctx) => {
   if (!ctx.user) {
     throw new AuthenticationError()
   }
@@ -53,12 +60,6 @@ const removeRace = (_, args, ctx) => {
     .exec()
 }
 
-export const joinRace = (_, args, ctx) => {
-  return Race.findOne({ raceId: _.raceId })
-    .lean()
-    .exec()
-}
-
 export default {
   Query: {
     races,
@@ -70,6 +71,85 @@ export default {
     removeRace
   },
   Race: {
-    circuit: joinCircuit
+    circuit(_, args, ctx) {
+      return circuit.call(
+        this,
+        _,
+        { filter: { circuitId: _.circuitId, ...args.filter } },
+        ctx
+      )
+    },
+    constructorStandings(_, args, ctx) {
+      return constructorStandings.call(
+        this,
+        _,
+        {
+          skip: args.skip,
+          limit: args.limit,
+          filter: { raceId: _.raceId, ...args.filter }
+        },
+        ctx
+      )
+    },
+    driverStandings(_, args, ctx) {
+      return driverStandings.call(
+        this,
+        _,
+        {
+          skip: args.skip,
+          limit: args.limit,
+          filter: { raceId: _.raceId, ...args.filter }
+        },
+        ctx
+      )
+    },
+    qualifyings(_, args, ctx) {
+      return qualifyings.call(
+        this,
+        _,
+        {
+          skip: args.skip,
+          limit: args.limit,
+          filter: { raceId: _.raceId, ...args.filter }
+        },
+        ctx
+      )
+    },
+    lapTimes(_, args, ctx) {
+      return lapTimes.call(
+        this,
+        _,
+        {
+          skip: args.skip,
+          limit: args.limit,
+          filter: { raceId: _.raceId, ...args.filter }
+        },
+        ctx
+      )
+    },
+    pitStops(_, args, ctx) {
+      return pitStops.call(
+        this,
+        _,
+        {
+          skip: args.skip,
+          limit: args.limit,
+          filter: { raceId: _.raceId, ...args.filter }
+        },
+        ctx
+      )
+    },
+    results(_, args, ctx) {
+      return results.call(
+        this,
+        _,
+        {
+          skip: args.skip,
+          limit: args.limit,
+          filter: { raceId: _.raceId, ...args.filter }
+        },
+        ctx
+      )
+    }
   }
 }

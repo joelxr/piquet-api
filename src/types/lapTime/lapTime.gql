@@ -1,8 +1,8 @@
 type LapTime {
   raceId: Int!
-  race: Race!
+  race(filter: FilterRaceInput): Race
   driverId: Int!
-  driver: Driver!
+  driver(filter: FilterDriverInput): Driver
   lap: Int!
   position: Int
   time: String
@@ -35,7 +35,7 @@ input FilterLapTimeInput {
 
 extend type Query {
   lapTimes(filter: FilterLapTimeInput, skip: Int, limit: Int): [LapTime]!
-  lapTime(driverId: Int!, raceId: Int!, lap: Int!): LapTime!
+  lapTime(filter: FilterLapTimeInput!): LapTime!
 }
 
 extend type Mutation {

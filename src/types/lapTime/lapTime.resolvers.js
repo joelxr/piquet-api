@@ -1,8 +1,8 @@
 import { AuthenticationError } from 'apollo-server'
 import { roles } from '../../utils/auth'
 import { LapTime } from './lapTime.model'
-import { joinDriver } from '../driver/driver.resolvers'
-import { joinRace } from '../race/race.resolvers'
+import { driver } from '../driver/driver.resolvers'
+import { race } from '../race/race.resolvers'
 import { LIMIT, SKIP } from '../../utils/queryDefaults'
 
 const lapTime = (_, args, ctx) => {
@@ -10,11 +10,7 @@ const lapTime = (_, args, ctx) => {
     throw new AuthenticationError()
   }
 
-  return LapTime.findOne({
-    raceId: args.raceId,
-    driverId: args.driverId,
-    lap: args.lap
-  })
+  return LapTime.findOne(args.filter)
     .lean()
     .exec()
 }
@@ -27,7 +23,7 @@ const newLapTime = (_, args, ctx) => {
   return LapTime.create({ ...args.input, createdBy: ctx.user._id })
 }
 
-const lapTimes = (_, args, ctx) => {
+export const lapTimes = (_, args, ctx) => {
   if (!ctx.user) {
     throw new AuthenticationError()
   }
@@ -70,7 +66,21 @@ export default {
     removeLapTime
   },
   LapTime: {
-    race: joinRace,
-    driver: joinDriver
+    driver(_, args, ctx) {
+      return driver.call(
+        this,
+        _,
+        { filter: { driverId: _.driverId, ...args.filter } },
+        ctx
+      )
+    },
+    race(_, args, ctx) {
+      return race.call(
+        this,
+        _,
+        { filter: { raceId: _.raceId, ...args.filter } },
+        ctx
+      )
+    }
   }
 }

@@ -2,15 +2,15 @@ import { AuthenticationError } from 'apollo-server'
 import { roles } from '../../utils/auth'
 import { SKIP, LIMIT } from '../../utils/queryDefaults'
 import { Qualifying } from './qualifying.model'
-import { joinDriver } from '../driver/driver.resolvers'
-import { joinRace } from '../race/race.resolvers'
-import { joinConstructor } from '../constructor/constructor.resolvers'
+import { driver } from '../driver/driver.resolvers'
+import { race } from '../race/race.resolvers'
+import { constructor } from '../constructor/constructor.resolvers'
 
 const qualifying = (_, args, ctx) => {
   if (!ctx.user) {
     throw new AuthenticationError()
   }
-  return Qualifying.findOne({ qualifyId: args.qualifyId })
+  return Qualifying.findOne(args.filter)
     .lean()
     .exec()
 }
@@ -23,7 +23,7 @@ const newQualifying = (_, args, ctx) => {
   return Qualifying.create({ ...args.input, createdBy: ctx.user._id })
 }
 
-const qualifyings = (_, args, ctx) => {
+export const qualifyings = (_, args, ctx) => {
   if (!ctx.user) {
     throw new AuthenticationError()
   }
@@ -68,8 +68,29 @@ export default {
     removeQualifying
   },
   Qualifying: {
-    race: joinRace,
-    driver: joinDriver,
-    constructor: joinConstructor
+    driver(_, args, ctx) {
+      return driver.call(
+        this,
+        _,
+        { filter: { driverId: _.driverId, ...args.filter } },
+        ctx
+      )
+    },
+    race(_, args, ctx) {
+      return race.call(
+        this,
+        _,
+        { filter: { raceId: _.raceId, ...args.filter } },
+        ctx
+      )
+    },
+    constructor(_, args, ctx) {
+      return constructor.call(
+        this,
+        _,
+        { filter: { constructorId: _.constructorId, ...args.filter } },
+        ctx
+      )
+    }
   }
 }

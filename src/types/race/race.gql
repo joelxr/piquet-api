@@ -3,11 +3,29 @@ type Race {
   year: Int!
   round: Int!
   circuitId: Int!
-  circuit: Circuit!
+  circuit(filter: FilterCircuitInput): Circuit
   name: String!
   date: Date!
   time: String
   url: String
+  constructorStandings(
+    skip: Int
+    limit: Int
+    filter: FilterConstructorStandingInput
+  ): [ConstructorStanding]
+  driverStandings(
+    skip: Int
+    limit: Int
+    filter: FilterDriverStandingInput
+  ): [DriverStanding]
+  qualifyings(
+    skip: Int
+    limit: Int
+    filter: FilterQualifyingInput
+  ): [Qualifying]
+  pitStops(skip: Int, limit: Int, filter: FilterPitStopInput): [PitStop]
+  lapTimes(skip: Int, limit: Int, filter: FilterLapTimeInput): [LapTime]
+  results(skip: Int, limit: Int, filter: FilterResultInput): [Result]
 }
 
 input NewRaceInput {
@@ -44,7 +62,7 @@ input FilterRaceInput {
 
 extend type Query {
   races(skip: Int, limit: Int, filter: FilterRaceInput): [Race]!
-  race(raceId: ID!): Race!
+  race(filter: FilterRaceInput!): Race!
 }
 
 extend type Mutation {

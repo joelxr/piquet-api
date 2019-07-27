@@ -4,6 +4,23 @@ type Constructor {
   name: String!
   nationality: String
   url: String!
+  constructorStandings(
+    skip: Int
+    limit: Int
+    filter: FilterConstructorStandingInput
+  ): [ConstructorStanding]
+  constructorResults(
+    skip: Int
+    limit: Int
+    filter: FilterConstructorResultInput
+  ): [ConstructorResult]
+  qualifyings(
+    skip: Int
+    limit: Int
+    filter: FilterQualifyingInput
+  ): [Qualifying]
+  pitStops(skip: Int, limit: Int, filter: FilterPitStopInput): [PitStop]
+  results(skip: Int, limit: Int, filter: FilterResultInput): [Result]
 }
 
 input NewConstructorInput {
@@ -35,7 +52,7 @@ extend type Query {
     limit: Int
     filter: FilterConstructorInput
   ): [Constructor]!
-  constructor(constructorId: ID!): Constructor!
+  constructor(filter: FilterConstructorInput!): Constructor!
 }
 
 extend type Mutation {

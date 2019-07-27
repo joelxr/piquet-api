@@ -2,12 +2,13 @@ import { Circuit } from './circuit.model'
 import { AuthenticationError } from 'apollo-server'
 import { roles } from '../../utils/auth'
 import { LIMIT, SKIP } from '../../utils/queryDefaults'
+import { races } from '../race/race.resolvers'
 
-const circuit = (_, args, ctx) => {
+export const circuit = (_, args, ctx) => {
   if (!ctx.user) {
     throw new AuthenticationError()
   }
-  return Circuit.findOne({ circuitId: args.circuitId })
+  return Circuit.findOne(args.filter)
     .lean()
     .exec()
 }
@@ -54,12 +55,6 @@ const removeCircuit = (_, args, ctx) => {
     .exec()
 }
 
-export const joinCircuit = (_, args, ctx) => {
-  return Circuit.findOne({ circuitId: _.circuitId })
-    .lean()
-    .exec()
-}
-
 export default {
   Query: {
     circuits,
@@ -69,5 +64,15 @@ export default {
     newCircuit,
     updateCircuit,
     removeCircuit
+  },
+  Circuit: {
+    races(_, args, ctx) {
+      return races.call(
+        this,
+        _,
+        { filter: { circuitId: _.circuitId, ...args.filter } },
+        ctx
+      )
+    }
   }
 }

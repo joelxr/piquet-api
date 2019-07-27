@@ -1,11 +1,11 @@
 type Qualifying {
   qualifyId: Int!
   raceId: Int!
-  race: Race!
+  race(filter: FilterRaceInput): Race
   driverId: Int!
-  driver: Driver!
+  driver(filter: FilterDriverInput): Driver
   constructorId: Int!
-  constructor: Constructor!
+  constructor(filter: FilterConstructorInput): Constructor
   number: Int!
   position: Int
   q1: String
@@ -54,7 +54,7 @@ extend type Query {
     limit: Int
     filter: FilterQualifyingInput
   ): [Qualifying]!
-  qualifying(qualifyId: ID!): Qualifying!
+  qualifying(filter: FilterQualifyingInput!): Qualifying!
 }
 
 extend type Mutation {

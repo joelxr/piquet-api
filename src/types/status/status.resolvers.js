@@ -7,7 +7,7 @@ const status = (_, args, ctx) => {
   if (!ctx.user) {
     throw new AuthenticationError()
   }
-  return Status.findOne({ statusId: args.statusId })
+  return Status.findOne(args.filter)
     .lean()
     .exec()
 }

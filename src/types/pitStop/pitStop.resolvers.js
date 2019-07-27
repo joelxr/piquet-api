@@ -2,21 +2,15 @@ import { AuthenticationError } from 'apollo-server'
 import { roles } from '../../utils/auth'
 import { SKIP, LIMIT } from '../../utils/queryDefaults'
 import { PitStop } from './pitStop.model'
-import { joinDriver } from '../driver/driver.resolvers'
-import { joinRace } from '../race/race.resolvers'
+import { driver } from '../driver/driver.resolvers'
+import { race } from '../race/race.resolvers'
 
 const pitStop = (_, args, ctx) => {
   if (!ctx.user) {
     throw new AuthenticationError()
   }
 
-  const { raceId, driverId, stop } = args
-
-  return PitStop.findOne({
-    raceId,
-    driverId,
-    stop
-  })
+  return PitStop.findOne(args.filter)
     .lean()
     .exec()
 }
@@ -29,7 +23,7 @@ const newPitStop = (_, args, ctx) => {
   return PitStop.create({ ...args.input, createdBy: ctx.user._id })
 }
 
-const pitStops = (_, args, ctx) => {
+export const pitStops = (_, args, ctx) => {
   if (!ctx.user) {
     throw new AuthenticationError()
   }
@@ -82,7 +76,21 @@ export default {
     removePitStop
   },
   PitStop: {
-    race: joinRace,
-    driver: joinDriver
+    driver(_, args, ctx) {
+      return driver.call(
+        this,
+        _,
+        { filter: { driverId: _.driverId, ...args.filter } },
+        ctx
+      )
+    },
+    race(_, args, ctx) {
+      return race.call(
+        this,
+        _,
+        { filter: { raceId: _.raceId, ...args.filter } },
+        ctx
+      )
+    }
   }
 }

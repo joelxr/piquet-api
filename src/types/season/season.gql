@@ -19,7 +19,7 @@ input FilterSeasonInput {
 
 extend type Query {
   seasons(skip: Int, limit: Int, filter: FilterSeasonInput): [Season]!
-  season(year: Int!): Season!
+  season(filter: FilterSeasonInput!): Season!
 }
 
 extend type Mutation {
