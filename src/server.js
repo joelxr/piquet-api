@@ -66,6 +66,8 @@ export const start = async () => {
       circuit,
       user
     ),
+    introspection: true,
+    playground: true,
     async context({ req }) {
       const user = await authenticate(req)
       return { user }
@@ -74,6 +76,5 @@ export const start = async () => {
 
   await connect(config.dbUrl)
   const { url } = await server.listen({ port: config.port })
-
-  console.log(`GQL server ready at ${url}`)
+  console.log(`🚀 GQL server ready at ${url}`)
 }

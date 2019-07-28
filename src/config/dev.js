@@ -1,6 +1,6 @@
 export const config = {
   secrets: {
-    jwt: "piquet"
+    jwt: 'piquet'
   },
-  dbUrl: "mongodb://localhost:27017/piquet"
-};
+  dbUrl: 'mongodb://localhost:27017/piquet'
+}

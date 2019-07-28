@@ -21,7 +21,7 @@ const updateMe = (_, args, ctx) => {
 }
 
 const signup = (_, args) => {
-  return User.create({ ...args.input, apiKey: newApiKey() })
+  return User.create({ ...args.input, role: 'member', apiKey: newApiKey() })
 }
 
 export default {
