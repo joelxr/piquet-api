@@ -42,7 +42,7 @@
     "rimraf": "2.6.x"
   },
   "dependencies": {
-    "apollo-server": "2.6.7",
+    "apollo-server": "2.14.2",
     "bcrypt": "3.0.6",
     "cuid": "2.1.6",
     "graphql": "14.4.2",
