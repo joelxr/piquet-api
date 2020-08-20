@@ -43,7 +43,7 @@
   },
   "dependencies": {
     "apollo-server": "2.6.7",
-    "bcrypt": "3.0.6",
+    "bcrypt": "5.0.0",
     "cuid": "2.1.6",
     "graphql": "14.4.2",
     "graphql-import": "0.7.1",
